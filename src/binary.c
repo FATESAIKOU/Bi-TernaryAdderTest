@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef uint8_t bit;
-
 #define B_TRUE 1
 #define B_FALSE 0
+
+typedef uint8_t bit;
 
 inline bit B_AND(bit a, bit b) {
     if (a == B_TRUE && b == B_TRUE) {
@@ -58,17 +58,17 @@ bit B_OVF(bit a, bit b, bit cin) {
     }
 }
 
-bit bit_at(int16_t a, int16_t idx) {
+bit bitAt(int16_t a, int16_t idx) {
     return (bit)((a & (1 << idx)) >> idx);
 }
 
-int16_t binary_add(int16_t a, int16_t b) {
+int16_t binaryAdd(int16_t a, int16_t b) {
     uint8_t i;
 
     int16_t res = 0, cin = 0;
     for (i = 0; i < 32; ++ i) {
-        bit ba = bit_at(a, i);
-        bit bb = bit_at(b, i);
+        bit ba = bitAt(a, i);
+        bit bb = bitAt(b, i);
 
         res |= ((uint16_t)B_SUM(ba, bb, cin)) << i;
         cin = (uint16_t)B_OVF(ba, bb, cin);
@@ -82,7 +82,7 @@ char* showBinary(int16_t a) {
     
     char *bit_str = (char*) malloc(sizeof(char) * 32);
     for (i = 15; i >= 0; -- i) {
-        bit_str[15 - i] = bit_at(a, i) + 48;
+        bit_str[15 - i] = bitAt(a, i) + 48;
     }
 
     return bit_str;
