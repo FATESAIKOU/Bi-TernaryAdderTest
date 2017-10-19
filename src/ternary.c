@@ -20,14 +20,44 @@ trit tritAt(int16_t a, int16_t idx) {
 }
 
 uint16_t decToTer(int16_t a) {
-    // Convert Here!!
+    int i;
+    int inv = 1;
+
+    if (a < 0) {
+        a *= inv = -1;
+    }
+
+    uint16_t res = 0, carry = 0, remainder;
+    for (i = 0; i < 8; ++ i) {
+        remainder = a % 3;
+
+        if (remainder + carry == 3) {
+            carry = 1;
+            res |= T_UNK << (i * 2);
+        } else if (remainder + carry == 2) {
+            carry = 1;
+            res |= ((inv == 1) ? T_FALSE:T_TRUE) << (i * 2);
+        } else if (remainder + carry == 1) {
+            carry = 0;
+            res |= ((inv == 1) ? T_TRUE:T_FALSE) << (i * 2);
+        } else if (remainder + carry == 0) {
+            carry = 0;
+            res |= T_UNK << (i * 2);
+        } else {
+            exit(1);
+        }
+
+        a /= 3;
+    }
+
+    return res;
 }
 
 char* showTernary(uint16_t a) {
     int i;
     
     char *trit_str = (char*) malloc(sizeof(char) * 8);
-    for (i = 7; i >= 0; -- i) {
+    for (i = 0; i < 8; ++ i) {
         switch (tritAt(a, i)) {
             case 0: trit_str[7 - i] = 'T'; break;
             case 1: trit_str[7 - i] = '0'; break;
