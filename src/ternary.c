@@ -12,18 +12,21 @@
 typedef uint8_t trit;
 
 inline trit T_MUX(trit sel, trit inN, trit inO, trit inP) {
-    if (sel == T_FALSE) {
-        return inN;
-    } else if (sel == T_UNK) {
-        return inO;
-    } else if (sel == T_TRUE) {
-        return inP;
-    } else {
-        exit(-1);
-    }
+    trit nf, of, pf;
+
+    nf = (sel == T_FALSE);
+    nf |= nf << 1;
+
+    of = (sel == T_UNK);
+    of |= of << 1;
+
+    pf = (sel == T_TRUE);
+    pf |= pf << 1;
+
+    return (nf & inN) | (of & inO) | (pf & inP);
 }
 
-trit T_HA(trit a, trit b) {
+inline trit T_HA(trit a, trit b) {
     trit pinN = T_MUX(a, T_TRUE, T_FALSE, T_UNK);
     trit pinP = T_MUX(a, T_UNK, T_TRUE, T_FALSE);
     trit sum  = T_MUX(b, pinN, a, pinP);
@@ -31,7 +34,7 @@ trit T_HA(trit a, trit b) {
     return sum;
 }
 
-trit T_CON(trit a, trit b) {
+inline trit T_CON(trit a, trit b) {
     trit pinN = T_MUX(a, T_FALSE, T_UNK, T_UNK);
     trit pinP = T_MUX(a, T_UNK, T_UNK, T_TRUE);
     trit con  = T_MUX(b, pinN, T_UNK, pinP);
@@ -140,6 +143,5 @@ char* showTernary(uint16_t a) {
 
     return trit_str;
 }
-
 
 #endif

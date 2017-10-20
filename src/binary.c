@@ -10,7 +10,7 @@
 
 typedef uint8_t bit;
 
-inline bit B_AND(bit a, bit b) {
+inline bit B_AND(bit a, bit b) { 
     if (a == B_TRUE && b == B_TRUE) {
         return B_TRUE;
     } else {
