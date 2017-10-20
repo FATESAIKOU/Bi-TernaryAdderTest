@@ -17,9 +17,9 @@ int main() {
     printf("a: %s\n", showTernary(decToTer(a)));
     printf("b: %s\n", showTernary(decToTer(b)));
 
-    for (i = 0; i < 128; ++ i) {
-        printf("+%d: %s\n", i, showTernary(decToTer(i)));
-        printf("%d: %s\n", -i, showTernary(decToTer(-i)));
+    for (i = 1; i < 3281; ++ i) {
+        printf("+%d: %s - %d\n", i, showTernary(decToTer(i)), terToDec(decToTer(i)));
+        printf("%d: %s - %d\n", -i, showTernary(decToTer(-i)), terToDec(decToTer(-i)));
     }
 
     return 0;

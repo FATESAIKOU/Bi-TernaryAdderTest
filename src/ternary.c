@@ -11,8 +11,40 @@
 
 typedef uint8_t trit;
 
-inline trit T_MUX(trit a, trit b) {
-    // Define basic MUX here!!
+inline trit T_MUX(trit sel, trit inN, trit inO, trit inP) {
+    if (sel == T_FALSE) {
+        return inN;
+    } else if (sel == T_UNK) {
+        return inO;
+    } else if (sel == T_TRUE) {
+        return inP;
+    } else {
+        exit(-1);
+    }
+}
+
+trit T_HA(trit a, trit b) {
+    trit pinN = T_MUX(a, T_TRUE, T_FALSE, T_UNK);
+    trit pinP = T_MUX(a, T_UNK, T_TRUE, T_FALSE);
+    trit sum = T_MUX(b, pinN, a, pinP);
+
+    return sum;
+}
+
+trit T_CON(trit a, trit b) {
+    trit pinN = T_MUX(a, T_FALSE, T_UNK, T_UNK);
+    trit pinP = T_MUX(a, T_UNK, T_UNK, T_TRUE);
+    trit con = T_MUX(b, pinN, T_UNK, pinP);
+
+    return con;
+}
+
+trit T_FA(trit a, trit b, trit cin) {
+    return T_HA(T_HA(a, b), cin);
+}
+
+trit T_OVF(trit a, trit b, trit cin) {
+    return T_CON(T_CON(a, b), cin);
 }
 
 trit tritAt(int16_t a, int16_t idx) {
@@ -53,15 +85,29 @@ uint16_t decToTer(int16_t a) {
     return res;
 }
 
+int16_t terToDec(uint16_t a) {
+    int i, fac;
+    int16_t res = 0;
+    
+    for (i = 0, fac = 1; i < 8; ++ i, fac *= 3) {
+        switch (tritAt(a, i)) {
+            case T_FALSE: res += -1 * fac; break;
+            case T_TRUE:  res += 1 * fac; break;
+        }
+    }
+
+    return res;
+}
+
 char* showTernary(uint16_t a) {
     int i;
     
     char *trit_str = (char*) malloc(sizeof(char) * 8);
     for (i = 0; i < 8; ++ i) {
         switch (tritAt(a, i)) {
-            case 0: trit_str[7 - i] = 'T'; break;
-            case 1: trit_str[7 - i] = '0'; break;
-            case 2: trit_str[7 - i] = '1'; break;
+            case T_FALSE: trit_str[7 - i] = 'T'; break;
+            case T_UNK:   trit_str[7 - i] = '0'; break;
+            case T_TRUE:  trit_str[7 - i] = '1'; break;
         }
     }
 

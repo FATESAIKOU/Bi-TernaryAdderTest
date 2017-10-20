@@ -42,7 +42,7 @@ inline bit B_NOT(bit a) {
     }
 }
 
-bit B_SUM(bit a, bit b, bit cin) {
+bit B_FA(bit a, bit b, bit cin) {
     if (B_XOR(B_XOR(a, b), cin)) {
         return B_TRUE;
     } else {
@@ -70,7 +70,7 @@ int16_t binaryAdd(int16_t a, int16_t b) {
         bit ba = bitAt(a, i);
         bit bb = bitAt(b, i);
 
-        res |= ((uint16_t)B_SUM(ba, bb, cin)) << i;
+        res |= ((uint16_t)B_FA(ba, bb, cin)) << i;
         cin = (uint16_t)B_OVF(ba, bb, cin);
     }
 
