@@ -65,13 +65,14 @@ bit bitAt(int16_t a, int16_t idx) {
 int16_t binaryAdd(int16_t a, int16_t b) {
     uint8_t i;
 
-    int16_t res = 0, cin = 0;
-    for (i = 0; i < 32; ++ i) {
+    int16_t res = 0;
+    bit cin = 0;
+    for (i = 0; i < 16; ++ i) {
         bit ba = bitAt(a, i);
         bit bb = bitAt(b, i);
 
-        res |= ((uint16_t)B_FA(ba, bb, cin)) << i;
-        cin = (uint16_t)B_OVF(ba, bb, cin);
+        res |= ((uint16_t) B_FA(ba, bb, cin)) << i;
+        cin = B_OVF(ba, bb, cin);
     }
 
     return res;
