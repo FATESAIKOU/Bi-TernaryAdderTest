@@ -18,8 +18,9 @@ int main() {
     printf("b: %s\n", showTernary(decToTer(b)));
 
     for (i = 1; i < 3281; ++ i) {
-        printf("+%d: %s - %d\n", i, showTernary(decToTer(i)), terToDec(decToTer(i)));
-        printf("%d: %s - %d\n", -i, showTernary(decToTer(-i)), terToDec(decToTer(-i)));
+        //printf("+%d: %s - %d\n", i, showTernary(decToTer(i)), terToDec(decToTer(i)));
+        //printf("%d: %s - %d\n", -i, showTernary(decToTer(-i)), terToDec(decToTer(-i)));
+        printf("%d + %d = %d\n", i, -i - 1, terToDec(ternaryAdd(decToTer(i), decToTer(-i - 1))));
     }
 
     return 0;

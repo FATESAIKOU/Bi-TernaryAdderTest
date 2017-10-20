@@ -26,7 +26,7 @@ inline trit T_MUX(trit sel, trit inN, trit inO, trit inP) {
 trit T_HA(trit a, trit b) {
     trit pinN = T_MUX(a, T_TRUE, T_FALSE, T_UNK);
     trit pinP = T_MUX(a, T_UNK, T_TRUE, T_FALSE);
-    trit sum = T_MUX(b, pinN, a, pinP);
+    trit sum  = T_MUX(b, pinN, a, pinP);
 
     return sum;
 }
@@ -34,7 +34,7 @@ trit T_HA(trit a, trit b) {
 trit T_CON(trit a, trit b) {
     trit pinN = T_MUX(a, T_FALSE, T_UNK, T_UNK);
     trit pinP = T_MUX(a, T_UNK, T_UNK, T_TRUE);
-    trit con = T_MUX(b, pinN, T_UNK, pinP);
+    trit con  = T_MUX(b, pinN, T_UNK, pinP);
 
     return con;
 }
@@ -44,11 +44,38 @@ trit T_FA(trit a, trit b, trit cin) {
 }
 
 trit T_OVF(trit a, trit b, trit cin) {
-    return T_CON(T_CON(a, b), cin);
+    trit maxCmpZeroDec = T_MUX(a, T_FALSE, T_FALSE, T_UNK);
+    trit minCmpZero    = T_MUX(a, T_FALSE, T_UNK, T_UNK);
+    trit maxCmpZero    = T_MUX(a, T_UNK, T_UNK, T_TRUE);
+    trit minCmpZeroInc = T_MUX(a, T_UNK, T_TRUE, T_TRUE);
+
+    trit inN = T_MUX(b, maxCmpZeroDec, minCmpZero, T_UNK);
+    trit inO = T_MUX(b, minCmpZero, T_UNK, maxCmpZero);
+    trit inP = T_MUX(b, T_UNK, maxCmpZero, minCmpZeroInc);
+
+    trit ovf = T_MUX(cin, inN, inO, inP);
+
+    return ovf;
 }
 
 trit tritAt(int16_t a, int16_t idx) {
     return (trit)((a & (3 << (idx * 2))) >> (idx * 2));
+}
+
+uint16_t ternaryAdd(uint16_t a, uint16_t b) {
+    uint8_t i;
+    
+    uint16_t res = 0;
+    trit cin = T_UNK;
+    for (i = 0; i < 8; ++ i) {
+        trit ta = tritAt(a, i);
+        trit tb = tritAt(b, i);
+        
+        res |= ((uint16_t) T_FA(ta, tb, cin)) << (i * 2); 
+        cin = T_OVF(ta, tb, cin);
+    }
+
+    return res;
 }
 
 uint16_t decToTer(int16_t a) {
