@@ -29,11 +29,11 @@ inline bit B_XOR(bit a, bit b) {
 }
 
 inline bit B_NOT(bit a) {
-    return (a == B_TRUE) & B_TRUE;
+    return (a == B_FALSE) & B_TRUE;
 }
 
 bit B_FA(bit a, bit b, bit cin) {
-    if (B_XOR(B_XOR(a, b), cin)) {
+    if (B_XOR(B_XOR(a, b), cin) == B_TRUE) {
         return B_TRUE;
     } else {
         return B_FALSE;
@@ -41,10 +41,10 @@ bit B_FA(bit a, bit b, bit cin) {
 }
 
 bit B_OVF(bit a, bit b, bit cin) {
-    if (B_OR(B_AND(a, b), B_AND(B_XOR(a, b), cin))) {
+    if (B_OR(B_AND(a, b), B_AND(B_XOR(a, b), cin)) == B_TRUE) {
         return B_TRUE;
     } else {
-       return B_FALSE; 
+        return B_FALSE; 
     }
 }
 
@@ -56,7 +56,7 @@ int16_t binaryAdd(int16_t a, int16_t b) {
     uint8_t i;
 
     int16_t res = 0;
-    bit cin = 0;
+    bit cin = B_FALSE;
     for (i = 0; i < 16; ++ i) {
         bit ba = bitAt(a, i);
         bit bb = bitAt(b, i);
