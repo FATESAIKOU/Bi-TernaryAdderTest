@@ -13,10 +13,10 @@ typedef uint8_t trit;
 
 inline trit T_MUX(trit sel, trit inN, trit inO, trit inP) {
     trit nf, of, pf;
-
+    
     nf = (sel == T_FALSE);
     nf |= nf << 1;
-
+    
     of = (sel == T_UNK);
     of |= of << 1;
 
