@@ -10,36 +10,26 @@
 
 typedef uint8_t bit;
 
-inline bit B_AND(bit a, bit b) { 
-    if (a == B_TRUE && b == B_TRUE) {
-        return B_TRUE;
-    } else {
-        return B_FALSE;
-    }
+inline bit B_AND(bit a, bit b) {
+    bit res = (a == B_TRUE && b == B_TRUE);
+
+    return res & B_TRUE;
 }
 
 inline bit B_OR(bit a, bit b) {
-    if (a == B_TRUE || b == B_TRUE) {
-        return B_TRUE;
-    } else {
-        return B_FALSE;
-    }
+    bit res = (a == B_TRUE || b == B_TRUE);
+
+    return res & B_TRUE;
 }
 
 inline bit B_XOR(bit a, bit b) {
-    if ((a == B_TRUE && b == B_FALSE) || (a == B_FALSE && b == B_TRUE)) {
-        return B_TRUE;
-    } else {
-        return B_FALSE;
-    }
+    bit res = ((a == B_TRUE && b == B_FALSE) || (a == B_FALSE && b == B_TRUE));
+
+    return res & B_TRUE;
 }
 
 inline bit B_NOT(bit a) {
-    if (a == B_TRUE) {
-        return B_FALSE;
-    } else {
-        return B_TRUE;
-    }
+    return (a == B_TRUE) & B_TRUE;
 }
 
 bit B_FA(bit a, bit b, bit cin) {
